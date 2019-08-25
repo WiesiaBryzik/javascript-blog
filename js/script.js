@@ -1,4 +1,5 @@
-{ 'use strict'; //shows error
+{
+'use strict'; //shows error
 
 const templates = {
   articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),
@@ -80,11 +81,9 @@ const templates = {
       const linkHTML = templates.articleLink(linkHTMLData);
 
       /* create HTML of the link */
-
-      /* insert link into titleList */
       html = html + linkHTML;
     }
-
+/* insert link into titleList */
     titleList.innerHTML = html;
 
     const links = document.querySelectorAll('.titles a');
@@ -119,7 +118,6 @@ const templates = {
     const classNumber = Math.floor(percentage * (optCloudClassCount - 1) + 1);
     return optCloudClassPrefix + classNumber;
 }
-
 
   //almost ok
   function generateTags() {
@@ -245,8 +243,8 @@ const templates = {
       /* END LOOP: for each found tag link */
     }
     /* execute function 'generateTitleLinks' with article selector as argument */
+    generateTitleLinks('[data-tags~=' + tag + ']');
   }
-  generateTitleLinks('[data-tags~=' + tag + ']');
 
   function addClickListenersToTags() {
     /* find all links to tags */
@@ -266,17 +264,18 @@ const templates = {
     const articles = document.querySelectorAll(optArticleSelector);
     console.log(articles);
 
+    /* make html variable with empty string */
+    let html = '';
+
     /* START LOOP: for every article: */
     for (let article of articles) {
       /* find author wrapper */
-      const authorList = article.querySelector(optArticleAuthorSelector);
+      const authorList = document.querySelector(optArticleAuthorSelector);
       authorList.innerHTML = '';
-
-      /* make html variable with empty string */
-      let html = '';
 
       /* get author from data-author attribute */
       const articleAuthor = article.getAttribute('data-author');
+      const articleElement = article.querySelector('.post-authos').innerHTML = articleAuthor;
       console.log(articleAuthor);
 
       /* generate HTML of the author */
@@ -335,6 +334,7 @@ const templates = {
     /* execute function 'generateTitleLinks' with article selector as argument */
 
   /*???????author jest not defined wiec jak mam się odnieść do author skoro jest poza {}*/
+
   generateTitleLinks('[data-author="' + author + '"]');
   }
 
