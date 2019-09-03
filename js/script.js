@@ -1,11 +1,11 @@
 {
-'use strict'; //shows error
+  'use strict'; //shows error
 
-const templates = {
-  articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),
-  tagLink: Handlebars.compile(document.querySelector('#template-tag-link').innerHTML),
-  authorLink: Handlebars.compile(document.querySelector('#template-author-link').innerHTML),
-  tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML)
+  const templates = {
+    articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),
+    tagLink: Handlebars.compile(document.querySelector('#template-tag-link').innerHTML),
+    authorLink: Handlebars.compile(document.querySelector('#template-author-link').innerHTML),
+    tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML)
   };
 
   const optArticleSelector = '.post',
@@ -18,7 +18,7 @@ const templates = {
     optCloudClassPrefix = 'tag-size-';
 
   //ok
-  const titleClickHandler = function(event) {
+  const titleClickHandler = function (event) {
     event.preventDefault();
     const clickedElement = this;
     console.log('Link was clicked!');
@@ -55,6 +55,8 @@ const templates = {
 
   //almost ok
   function generateTitleLinks(customSelector = '') {
+    console.log(customSelector);
+
     /* remove contents of titleList */
     const titleList = document.querySelector(optTitleListSelector);
     titleList.innerHTML = '';
@@ -83,7 +85,7 @@ const templates = {
       /* create HTML of the link */
       html = html + linkHTML;
     }
-/* insert link into titleList */
+    /* insert link into titleList */
     titleList.innerHTML = html;
 
     const links = document.querySelectorAll('.titles a');
@@ -104,10 +106,10 @@ const templates = {
       if (tags[tag] > params.max) {
         params.max = tags[tag];
       } else if (tags[tag] < params.min) {
-          params.min = tags[tag];
-        }
-        console.log(tag + ' is used ' + tags[tag] + ' times');
+        params.min = tags[tag];
       }
+      console.log(tag + ' is used ' + tags[tag] + ' times');
+    }
     return params;
   }
 
@@ -117,7 +119,7 @@ const templates = {
     const percentage = normalizedCount / normalizedMax;
     const classNumber = Math.floor(percentage * (optCloudClassCount - 1) + 1);
     return optCloudClassPrefix + classNumber;
-}
+  }
 
   //almost ok
   function generateTags() {
@@ -150,10 +152,10 @@ const templates = {
       for (let tag of articleTagsArray) {
         console.log(tag);
 
-       /* generate HTML of the link */
+        /* generate HTML of the link */
         //const linkHTML = '<li><a href="#tag-' + tag + '"><span>' + tag + '</span></a>' + '&nbsp;' + '</li>';
         // console.log(linkHTML);
-        const linkHTMLData = { id: articleTags, title: tag };
+        const linkHTMLData = { id: tag, title: tag };
         const linkHTML = templates.tagLink(linkHTMLData);
         /* add generated code to html variable */
         html = html + linkHTML;
@@ -181,7 +183,7 @@ const templates = {
     /* [NEW] create variable for all links HTML code */
 
     // let allTagsHTML = '';
-    const allTagsData = {tags: []};
+    const allTagsData = { tags: [] };
 
     // const tagLinkHTML = '<li>' + calculateTagClass(allTags[tag], tagsParam) + tag + ' + allTags[tag] + ' + '</li>';
     // console.log('tagLinkHTML:', tagLinkHTML);
@@ -242,8 +244,10 @@ const templates = {
 
       /* END LOOP: for each found tag link */
     }
+    console.log(tag);
+
     /* execute function 'generateTitleLinks' with article selector as argument */
-    generateTitleLinks('[data-tags~=' + tag + ']');
+    generateTitleLinks('[data-tags~="' + tag + '"]');
   }
 
   function addClickListenersToTags() {
@@ -264,8 +268,7 @@ const templates = {
     const articles = document.querySelectorAll(optArticleSelector);
     console.log(articles);
 
-    /* make html variable with empty string */
-    let html = '';
+    const allAuthors = {};
 
     /* START LOOP: for every article: */
     for (let article of articles) {
@@ -275,17 +278,29 @@ const templates = {
 
       /* get author from data-author attribute */
       const articleAuthor = article.getAttribute('data-author');
-      const articleElement = article.querySelector('.post-authos').innerHTML = articleAuthor;
+      article.querySelector('.post-authors').innerHTML = articleAuthor;
       console.log(articleAuthor);
 
-      /* generate HTML of the author */
-      //const authorHTML = '<li><a href="#author-' + articleAuthor + '"><span>' + articleAuthor + '</span></a></li>';
-      //console.log(authorHTML);
-      const linkHTMLData = { id: articleAuthor, title: articleAuthor };
-      const linkHTML = templates.authorLink(linkHTMLData);
+      /* make html variable with empty string */
+      let html = '';
 
-      /* add generated code to html variable */
-      html = html + linkHTML;
+      if (!allAuthors.hasOwnProperty(articleAuthor)) {
+        /* [NEW] add generated code to allTags object */
+        allAuthors[articleAuthor] = 1;
+      } else {
+        allAuthors[articleAuthor]++;
+      }
+
+      for (let author in allAuthors) {
+        /* generate HTML of the author */
+        //const authorHTML = '<li><a href="#author-' + articleAuthor + '"><span>' + articleAuthor + '</span></a></li>';
+        //console.log(authorHTML);
+        const linkHTMLData = { id: author, title: author };
+        const linkHTML = templates.authorLink(linkHTMLData);
+
+        /* add generated code to html variable */
+        html = html + linkHTML;
+      }
 
       /* insert HTML of all the links into the tags wrapper */
       authorList.innerHTML = html;
@@ -333,9 +348,9 @@ const templates = {
     }
     /* execute function 'generateTitleLinks' with article selector as argument */
 
-  /*???????author jest not defined wiec jak mam się odnieść do author skoro jest poza {}*/
+    /*???????author jest not defined wiec jak mam się odnieść do author skoro jest poza {}*/
 
-  generateTitleLinks('[data-author="' + author + '"]');
+    generateTitleLinks('[data-author="' + author + '"]');
   }
 
   function addClickListenersToAuthors() {
