@@ -348,14 +348,12 @@
     }
     /* execute function 'generateTitleLinks' with article selector as argument */
 
-    /*???????author jest not defined wiec jak mam się odnieść do author skoro jest poza {}*/
-
     generateTitleLinks('[data-author="' + author + '"]');
   }
 
   function addClickListenersToAuthors() {
     /* find all links to authors */
-    const links = document.querySelectorAll('.post-author a');
+    const links = document.querySelectorAll('.authors a');
 
     /* START LOOP: for each link */
     /* add tagClickHandler as event listener for that link */
