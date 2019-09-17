@@ -221,7 +221,6 @@
 
     /* make a new constant 'tag' and extract tag from the 'href' constant */
     const tag = href.replace('#tag-', '');
-    console.log(tag);
 
     /* find all tag links with class active */
     const activeTags = document.querySelectorAll('a.active[href^="#tag-"]');
@@ -321,7 +320,6 @@
 
     /* make a new constant 'author' and extract author from the 'href' constant */
     const author = href.replace('#author-', '');
-    console.log(tag);
 
     /* find all author links with class active */
     const activeAuthors = document.querySelectorAll(
@@ -330,8 +328,8 @@
 
     /* START LOOP: for each active author link */
     for (let activeAuthor of activeAuthors) {
-      /* remove class active */
-      activeAuthor.classList.remove('active');
+      /* add class active */
+      activeAuthor.classList.add('active');
 
       /* END LOOP: for each active author link */
     }
